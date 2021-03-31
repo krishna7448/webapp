@@ -1,0 +1,68 @@
+{% extends 'frontend/index.html' %}
+{% load static %}
+{% block title %} About {% endblock %}
+
+{% block content %}
+<main class="container">
+
+  <div class=" text-center py-5 px-3">
+    <h1>Server Status</h1>
+    <table>
+      <tr>
+        <td>CPU Used :</td>
+        <td id="usedcpu"></td>
+      </tr>
+      <tr>
+        <td>RAM :</td>
+        <td id="ram"></td>
+      </tr>
+      <tr>
+        <td>Total RAM :</td>
+        <td id="total_ram"></td>
+      </tr>
+    </table>
+    <div id="disks" >
+
+    </div>
+    <p>{{ request.path }}<br>{{ request.get_full_path }}</p>
+    <p></p>
+    <p class="lead">Use this document as a way to quickly start any new project.<br> All you get is this text and a mostly barebones HTML document.</p>
+  </div>
+
+</main>
+{% endblock %}
+{% block javascript %}
+<script>      
+
+function fetchdata(){
+  $.ajax({
+    url: '/getserverstatusdata/',
+    type: 'get',
+    dataType: 'JSON',
+    success: function(response){
+      var len = response.length;
+      console.log(response.disk);
+      var diskData = response.disk.map(function(disk, index){
+        return `<div class="col-md-4"><div class="card" >
+          <span class="card-header" >disk no.: ${index + 1}</span>
+            <p>total: ${disk[0]}</p>
+            <p>used: ${disk[1]}</p>
+            <p>free: ${disk[2]}</p>
+            <p>percent: ${disk[3]}</p>
+          </div></div>`;
+      })
+      jQuery("#disks").html(diskData);
+      document.getElementById("usedcpu").innerHTML = response.cpu;
+      document.getElementById("ram").innerHTML = response.ram_percent;
+      document.getElementById("total_ram").innerHTML = response.ram_total;
+    }
+  });
+}
+
+$(document).ready(function(){
+  fetchdata();
+ // setInterval(fetchdata,1000);
+  //fetchdata();
+});
+</script>
+{% endblock %}

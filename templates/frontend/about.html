@@ -1,0 +1,16 @@
+{% extends 'frontend/index.html' %}
+{% load static %}
+{% block title %} About {% endblock %}
+
+{% block content %}
+<main class="container">
+
+  <div class=" text-center py-5 px-3">
+    <h1>Bootstrap starter template</h1>
+    <p>Password :<br>{{ newpassword }}</p>
+    <p>{{ request.path }}<br>{{ request.get_full_path }}</p>
+    <p class="lead">Use this document as a way to quickly start any new project.<br> All you get is this text and a mostly barebones HTML document.</p>
+  </div>
+
+</main>
+{% endblock %}

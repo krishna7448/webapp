@@ -1,0 +1,21 @@
+{% extends 'frontend/index.html' %}
+{% load static %}
+{% block title %} User Details {% endblock %}
+
+{% block content %}
+<main class="container">
+
+  <div class=" text-center py-5 px-3">
+<p>
+    {{ userdata.first_name }} 
+    {{ userdata.last_name }}<br>
+    {{ userdata.username }}<br>
+    {{ userdata.email }}<br>
+    {{ userdata.password }}<br>
+    {{ userdata.last_login }}<br>
+    {{ userdata.date_joined }}
+  </p>
+  </div>
+
+</main>
+{% endblock %}
