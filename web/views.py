@@ -14,7 +14,7 @@ def home(request):
 
 def about(request):
     characters = list('abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!#$%&()*+,-./:;<=>?@[]^_`{|}~')
-    newpassword =  ""
+    newpassword = ""
     
     for x in range(20):
         newpassword += random.choice(characters)
