@@ -72,7 +72,7 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'webapp.wsgi.application'
-ASGI_APPLICATION = 'webapp.routing.application'
+ASGI_APPLICATION = 'webapp.asgi.application'
 
 # redis configuretion
 CHANNEL_LAYERS = {

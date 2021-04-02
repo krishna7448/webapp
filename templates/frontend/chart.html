@@ -5,22 +5,39 @@
 {% block content %}
 <main class="container">
 
-  <div class=" text-center py-5 px-3">
-      
-    
+  <div class="py-5 px-3" style="max-width: 900px; max-height: 400px; position: relative;">
+    <canvas id="myChart"></canvas>
   </div>
 
 </main>
 {% endblock %}
+{% block jsfiles %}      
+<script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
+{% endblock %}
 
 {% block javascript %}
 <script>
-  
-    var socket = new WebSocket('ws://' + window.location.host + '/ws/polData/');
+var ctx = document.getElementById('myChart').getContext('2d');
+var chart = new Chart(ctx, {
+    // The type of chart we want to create
+    type: 'line',
 
-    socket.onopen = function open() {
-      console.log('WebSockets connection created.');
-    };
+    // The data for our dataset
+    data: {
+        labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+        datasets: [{
+            label: 'My First dataset',
+            backgroundColor: 'rgb(255, 99, 132)',
+            borderColor: 'rgb(255, 99, 132)',
+            data: [0, 10, 5, 2, 20, 30, 45]
+        }]
+    },
 
-  </script>
+    // Configuration options go here
+    options: {}
+});
+</script>
+<script>
+
+</script>
 {% endblock %}
