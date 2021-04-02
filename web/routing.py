@@ -1,15 +1,7 @@
-from channels.routing import ProtocolTypeRouter, URLRouter
-from channels.auth import AuthMiddlewareStack
 from django.urls import path
-from webapp import consumers
 
-websocket_urlPattern=[
-    path('ws/polData/',consumers.DashConsumer),
+from .consumers import WSConsumer
+
+ws_urlpatterns = [
+    path('ws/some_url/', WSConsumer.as_asgi())
 ]
-
-application=ProtocolTypeRouter({
-    #'http':
-    'websockets':AuthMiddlewareStack(URLRouter(websocket_urlPattern))
-
-})
-

@@ -1,25 +1,11 @@
-from channels.generic.websocket import AsyncWebsocketConsumer
-#import websockets
+from channels.generic.websocket import WebsocketConsumer
 import json
-import asyncio
+from random import randint
+from time import sleep
 
-class DashConsumer(AsyncWebsocketConsumer):
-    async def connect(self):
-        self.groupname='dashboard'
-        await self.channel_layer.group_add(
-            self.groupname,
-            self.channel_name,
-        )
-        await self.accept()
-
-    async def disconnect(self,close_code):
-
-        #await self.disconnect()
-        pass
-
-    async def receive(self,text_data):
-
-        print('>>>>', text_data)
-
-        pass
-
+class WSConsumer(WebsocketConsumer):
+    def connect(self):
+        self.accept()
+        for i in range(1000):
+            self.send(json.dumps({'message':randint(1,100)}))
+            sleep(1)
