@@ -23,6 +23,11 @@ def about(request):
         'newpassword':newpassword
     }
     return render(request, "frontend/about.html", context=data)
+
+def chart(request):
+    
+    return render(request, "frontend/chart.html")
+
 def serverStatus(request):
     
     return render(request, "frontend/serverstatus.html")

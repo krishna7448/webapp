@@ -18,6 +18,7 @@ from . import views
 
 urlpatterns = [
     path('', views.home, name='home'),
+    path('chart/', views.chart, name='Chart'),
     path('about/', views.about, name='about'),
     path('profile/', views.userProfile, name='UserProfile'),
     path('serverstatus/', views.serverStatus, name='serverstatus'),
