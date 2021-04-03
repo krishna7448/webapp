@@ -86,8 +86,8 @@
                     <div class="col-xs-12 col-sm-6 col-md-3">
                         <div class="skill-item center-block">
                             <div class="chart-container">
-                                <div class="chart" id="cpu" data-percent="92" data-bar-color="#23afe3">
-                                    <span class="percent" data-after="%">92</span>
+                                <div class="chart" id="cpu" data-percent="" data-bar-color="#23afe3">
+                                    <span class="percent" data-after="%"></span>
                                 </div>
                             </div>
 
@@ -98,8 +98,8 @@
                     <div class="col-xs-12 col-sm-6 col-md-3">
                         <div class="skill-item center-block">
                             <div class="chart-container">
-                                <div class="chart" id="ram" data-percent="78" data-bar-color="#a7d212">
-                                    <span class="percent" data-after="%">78</span>
+                                <div class="chart" id="ram" data-percent="" data-bar-color="#a7d212">
+                                    <span class="percent" data-after="%"></span>
                                 </div>
                             </div>
 
@@ -110,8 +110,8 @@
                     <div class="col-xs-12 col-sm-6 col-md-3">
                         <div class="skill-item center-block">
                             <div class="chart-container">
-                                <div class="chart" id="storage" data-percent="95" data-bar-color="#ff4241">
-                                    <span class="percent" data-after="%">95</span>
+                                <div class="chart" id="storage" data-percent="" data-bar-color="#ff4241">
+                                    <span class="percent" data-after="%"></span>
                                 </div>
                             </div>
 
@@ -122,8 +122,8 @@
                     <div class="col-xs-12 col-sm-6 col-md-3">
                         <div class="skill-item center-block">
                             <div class="chart-container">
-                                <div class="chart" id="network" data-percent="65" data-bar-color="#edc214">
-                                    <span class="percent" data-after="%">65</span>
+                                <div class="chart" id="network" data-percent="" data-bar-color="#edc214">
+                                    <span class="percent" data-after="%"></span>
                                 </div>
                             </div>
 
@@ -144,6 +144,14 @@
 {% endblock %}
 
 {% block javascript %}
+<script>/*
+var lo = new WebSocket('ws://localhost:8000/chart/');
+lo.onmessage = (data) => console.log(data)
+lo.onopen = () => {
+    console.log("sending dash");
+    lo.send(JSON.stringify({"dash": 1}));
+}*/
+</script>
 <script>
     'use strict';
 
@@ -159,7 +167,6 @@ function run()
 		 
 	}
 };
- 
 /* chart
 ================================================== */
 function data_chart ()
@@ -183,29 +190,32 @@ function data_chart ()
 		});
 	});
 };
- 
 
-$(document).ready(function() {
-  
-	run(data_chart);
-  
-    
-});
-
-var socket = new WebSocket('ws://localhost:8000/ws/some_url/');
-
-socket.onmessage = function(event){
+function update_data(){
+var lo = new WebSocket('ws://localhost:8000/chart/');
+lo.onopen = () => {
+    console.log("sending dash");
+    lo.send(JSON.stringify({"dash": 1}));
+}
+lo.onmessage = (data) => console.log(data);
+lo.onmessage = function(event){
     var data = JSON.parse(event.data);
     console.log(data);
         var cpu = window.chart = $('#cpu').data('easyPieChart');
         var ram = window.chart = $('#ram').data('easyPieChart');
         var storage = window.chart = $('#storage').data('easyPieChart');
         var network = window.chart = $('#network').data('easyPieChart');
-			cpu.update(data.message);
-            ram.update(data.message);
+			cpu.update(data.cpu);
+            ram.update(data.ram);
             storage.update(data.message);
             network.update(data.message);
     }
+}
 
+$(document).ready(function() {
+  
+  run(data_chart);
+  setInterval(update_data,1000);
+});
 </script>
 {% endblock %}
