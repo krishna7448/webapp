@@ -236,15 +236,6 @@
       {% block jsfiles %}
       {% endblock %}
       {% block javascript %}
-      <script>
-  
-        var socket = new WebSocket('ws://' + window.location.host + '/ws/some_url/');
-    
-        socket.onopen = function open() {
-          console.log(socket);
-        };
-    
-      </script>
       {% endblock %}
   
         

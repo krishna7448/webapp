@@ -1,67 +1,211 @@
 {% extends 'frontend/index.html' %}
 {% load static %}
 {% block title %} Chart {% endblock %}
+{% block extra_css %}
+<style>
+.b-skills
+{
+	border-top: 1px solid #f9f9f9;
+	padding-top: 46px;
+	text-align: center;
+}
+
+.b-skills:last-child { margin-bottom: -30px; }
+
+.b-skills h2 { margin-bottom: 50px; font-weight: 900; text-transform: uppercase;}
+
+.skill-item
+{
+	position: relative;
+	max-width: 250px;
+	width: 100%;
+	margin-bottom: 30px;
+	color: #555;
+}
+
+.chart-container
+{
+	position: relative;
+	width: 100%;
+	height: 0;
+	padding-top: 100%;
+	margin-bottom: 27px;
+}
+
+.skill-item .chart,
+.skill-item .chart canvas
+{
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100% !important;
+	height: 100% !important;
+}
+
+.skill-item .chart:before
+{
+	content: "";
+	width: 0;
+	height: 100%;
+}
+
+.skill-item .chart:before,
+.skill-item .percent
+{
+	display: inline-block;
+	vertical-align: middle;
+}
+
+.skill-item .percent
+{
+	position: relative;
+	line-height: 1;
+	font-size: 40px;
+	font-weight: 900;
+	z-index: 2;
+}
+
+.skill-item  .percent:after
+{
+	content: attr(data-after);
+	font-size: 20px;
+}
+</style>
+
+{% endblock %}
+
 
 {% block content %}
 <main class="container">
+    <div class="py-5 px-3" style="margin-top: 20px;">
+        <div class="b-skills">
+            <div class="container">
+                <h2>Our Skills</h2>
 
-  <div class="py-5 px-3" style="max-width: 900px; max-height: 400px; position: relative;">
-    <canvas id="chart-area"></canvas>
-  </div>
-  <div>
-      <h1 id="app">{{ text }}</h1>
-  </div>
+                <div class="row">
+                    <div class="col-xs-12 col-sm-6 col-md-3">
+                        <div class="skill-item center-block">
+                            <div class="chart-container">
+                                <div class="chart" id="cpu" data-percent="92" data-bar-color="#23afe3">
+                                    <span class="percent" data-after="%">92</span>
+                                </div>
+                            </div>
 
+                            <p>CPU</p>
+                        </div>
+                    </div>
+
+                    <div class="col-xs-12 col-sm-6 col-md-3">
+                        <div class="skill-item center-block">
+                            <div class="chart-container">
+                                <div class="chart" id="ram" data-percent="78" data-bar-color="#a7d212">
+                                    <span class="percent" data-after="%">78</span>
+                                </div>
+                            </div>
+
+                            <p>RAM</p>
+                        </div>
+                    </div>
+
+                    <div class="col-xs-12 col-sm-6 col-md-3">
+                        <div class="skill-item center-block">
+                            <div class="chart-container">
+                                <div class="chart" id="storage" data-percent="95" data-bar-color="#ff4241">
+                                    <span class="percent" data-after="%">95</span>
+                                </div>
+                            </div>
+
+                            <p>Storage</p>
+                        </div>
+                    </div>
+
+                    <div class="col-xs-12 col-sm-6 col-md-3">
+                        <div class="skill-item center-block">
+                            <div class="chart-container">
+                                <div class="chart" id="network" data-percent="65" data-bar-color="#edc214">
+                                    <span class="percent" data-after="%">65</span>
+                                </div>
+                            </div>
+
+                            <p>Network</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </main>
 {% endblock %}
-{% block jsfiles %}      
-<script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
+{% block jsfiles %}
+<script src="{% static 'frontend/js/jquery.appear.min.js' %}"></script>
+<script src="{% static 'frontend/js/easypiechart/easypiechart.min.js' %}"></script>
+<script src="{% static 'frontend/js/easypiechart/jquery.easypiechart.min.js' %}"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.1.4/Chart.min.js"></script>
 {% endblock %}
 
 {% block javascript %}
 <script>
-var ctx = document.getElementById('chart-area').getContext('2d');
-var DATA_COUNT = 5;
-var NUMBER_CFG = {count: DATA_COUNT, min: 0, max: 100};
+    'use strict';
 
-var myChart = new Chart(ctx, {
-    type: 'doughnut',
-    data: {
-        labels: ['RAM'],
-        datasets: [{
-            label: '# of Votes',
-            //data: Utils.numbers(NUMBER_CFG),
-            //backgroundColor: Object.values(Utils.CHART_COLORS),
-            data:[50],
-            backgroundColor: [
-                'rgba(255, 99, 132, 0.2)'
-            ],
-            borderColor: [
-                'rgba(255, 99, 132, 1)'
-            ],
-            borderWidth: 1
-        }]
-    },
-    options: {
-        responsive: true,
-        plugins: {
-            legend: {
-                position: 'top',
-            },
-            title: {
-                display: true,
-                text: 'Chart.js Doughnut Chart'
-            }
-        }
-    }
+var $window = $(window);
+
+function run()
+{
+	var fName = arguments[0],
+		aArgs = Array.prototype.slice.call(arguments, 1);
+	try {
+		fName.apply(window, aArgs);
+	} catch(err) {
+		 
+	}
+};
+ 
+/* chart
+================================================== */
+function data_chart ()
+{
+	$('.b-skills').appear(function() {
+		setTimeout(function() {
+			$('.chart').easyPieChart({
+				easing: 'easeOutElastic',
+				delay: 3000,
+				barColor: '#369670',
+				trackColor: '#fff',
+				scaleColor: false,
+				lineWidth: 21,
+				trackWidth: 21,
+				size: 250,
+				lineCap: 'round',
+				onStep: function(from, to, percent) {
+					this.el.children[0].innerHTML = Math.round(percent);
+				}
+			});
+		});
+	});
+};
+ 
+
+$(document).ready(function() {
+  
+	run(data_chart);
+  
+    
 });
-</script>
-<script>
+
 var socket = new WebSocket('ws://localhost:8000/ws/some_url/');
+
 socket.onmessage = function(event){
     var data = JSON.parse(event.data);
-    console.log(data.message);
-    document.querySelector('#app').innerText = data.message
-}
+    console.log(data);
+        var cpu = window.chart = $('#cpu').data('easyPieChart');
+        var ram = window.chart = $('#ram').data('easyPieChart');
+        var storage = window.chart = $('#storage').data('easyPieChart');
+        var network = window.chart = $('#network').data('easyPieChart');
+			cpu.update(data.message);
+            ram.update(data.message);
+            storage.update(data.message);
+            network.update(data.message);
+    }
+
 </script>
 {% endblock %}
