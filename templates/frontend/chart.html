@@ -205,8 +205,8 @@ lo.onmessage = function(event){
         var ram = window.chart = $('#ram').data('easyPieChart');
         var storage = window.chart = $('#storage').data('easyPieChart');
         var network = window.chart = $('#network').data('easyPieChart');
-			cpu.update(data.cpu);
-            ram.update(data.ram);
+			cpu.update(Math.round(data.cpu));
+            ram.update(Math.round(data.ram));
             storage.update(data.message);
             network.update(data.message);
     }
